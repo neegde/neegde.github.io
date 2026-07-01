@@ -69,6 +69,7 @@ function Nav() {
           <a href="#how" className="hover:text-white transition">Как работает</a>
           <a href="#specs" className="hover:text-white transition">Возможности</a>
           <a href="#faq" className="hover:text-white transition">Вопросы</a>
+          <a href="/wiki/" className="hover:text-white transition">Документация</a>
           <a
             href={REPO_URL}
             target="_blank"
