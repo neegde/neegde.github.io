@@ -23,6 +23,11 @@
   --mono:'JetBrains Mono',monospace;
   --sans:'Inter Tight',system-ui,sans-serif;
 }
+html.light{
+  --bg:#f5f3ee; --bg2:#ebe8e0; --card:#f9f7f2; --surface:#fff;
+  --ink:#1a1815; --dim:#5d584a; --faint:#8c8472;
+  --line:#d4d0c6;
+}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:var(--sans); background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased; line-height:1.6}
@@ -64,11 +69,11 @@ main hr{border:none; border-top:1px solid var(--line); margin:32px 0}
 pre{background:var(--surface); color:var(--ink); padding:16px 18px; margin-top:14px; font-size:12px; font-family:var(--mono); line-height:1.75; overflow-x:auto; border:1px solid var(--line); border-radius:2px; white-space:pre; word-wrap:normal}
 code{font-family:var(--mono); font-size:12px; background:var(--surface); border:1px solid var(--line); padding:2px 6px; border-radius:2px}
 table{width:100%; border-collapse:collapse; margin-top:14px; font-size:12px; border:1px solid var(--line)}
-th,td{padding:10px 14px; text-align:left; border-bottom:1px solid var(--line); border-right:1px solid rgba(255,255,255,.06)}
+th,td{padding:10px 14px; text-align:left; border-bottom:1px solid var(--line); border-right:1px solid var(--line)}
 th{background:var(--surface); color:var(--ink); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-family:var(--mono)}
 td:last-child,th:last-child{border-right:none}
 tr:last-child td{border-bottom:none}
-td code{background:rgba(255,255,255,.04); border:none; padding:1px 4px}
+td code{background:var(--card); border:none; padding:1px 4px}
 .note{display:flex; align-items:flex-start; gap:12px; margin-top:18px; border:1px dashed var(--line); padding:14px 16px; font-size:12.5px; font-weight:500; color:var(--dim); border-radius:2px}
 .note .ic{width:28px; height:28px; flex:0 0 28px; background:var(--brand); color:#000; display:grid; place-items:center; font-size:14px; font-weight:800; border-radius:2px}
 .note strong,.note b{color:var(--ink)}
@@ -105,6 +110,14 @@ td code{background:rgba(255,255,255,.04); border:none; padding:1px 4px}
 .burger{display:none; position:fixed; top:14px; left:14px; z-index:101; width:40px; height:40px; border:1px solid var(--line); background:var(--bg2); align-items:center; justify-content:center; cursor:pointer; border-radius:2px}
 .overlay{display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:99}
 .overlay.show{display:block}
+html.light .overlay{background:rgba(0,0,0,.2)}
+html.light .side.open{box-shadow:4px 0 20px rgba(0,0,0,.1)}
+html.light pre{color:var(--ink)}
+.themetog{display:flex; border:1px solid var(--line); margin:8px 20px 0}
+.themetog button{font-family:var(--mono); font-weight:700; font-size:12px; padding:7px 0; border:none; border-right:1px solid var(--line); background:var(--bg2); color:var(--dim); cursor:pointer; transition:.1s; flex:1; text-align:center}
+.themetog button:last-child{border-right:none}
+.themetog button.on{background:var(--brand); color:#000}
+.themetog button:not(.on):hover{background:var(--card); color:var(--ink)}
 </style>
 </head>
 <body>
@@ -121,6 +134,10 @@ td code{background:rgba(255,255,255,.04); border:none; padding:1px 4px}
   <div class="langtog" id="langtog">
     <button data-lang="en" class="on">EN</button>
     <button data-lang="ru">RU</button>
+  </div>
+  <div class="themetog" id="themetog">
+    <button data-theme="dark" class="on">Dark</button>
+    <button data-theme="light">Light</button>
   </div>
   <nav>
     <a href="#home" data-i18n="s_home">Home</a>
@@ -10105,10 +10122,10 @@ function setLang(lang){
     b.classList.toggle('on', b.getAttribute('data-lang') === lang);
   });
   document.querySelectorAll('.section-content[data-lang="en"]').forEach(function(el){
-    el.style.display = lang === 'en' ? '' : 'none';
+    el.style.display = lang === 'en' ? 'block' : 'none';
   });
   document.querySelectorAll('.section-content[data-lang="ru"]').forEach(function(el){
-    el.style.display = lang === 'ru' ? '' : 'none';
+    el.style.display = lang === 'ru' ? 'block' : 'none';
   });
   try{ localStorage.setItem('neegde_wiki_lang', lang); }catch(e){}
 }
@@ -10118,5 +10135,20 @@ document.querySelectorAll('#langtog button').forEach(function(b){
 var saved = "en";
 try{ saved = localStorage.getItem('neegde_wiki_lang') || "en"; }catch(e){}
 setLang(saved);
+
+/* ---- theme ---- */
+function setTheme(t){
+  document.documentElement.classList.toggle('light', t==='light');
+  document.querySelectorAll('#themetog button').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-theme')===t);
+  });
+  try{ localStorage.setItem('neegde_wiki_theme', t); }catch(e){}
+}
+document.querySelectorAll('#themetog button').forEach(function(b){
+  b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme')); });
+});
+var st = "dark";
+try{ st = localStorage.getItem('neegde_wiki_theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); }catch(e){}
+setTheme(st);
 </script>
 </body></html>
