@@ -74,7 +74,7 @@ td code{background:rgba(255,255,255,.04); border:none; padding:1px 4px}
 .note strong,.note b{color:var(--ink)}
 .note.warn{border-color:#e0402b}
 .note.warn .ic{background:#e0402b; color:#fff}
-[data-lang="ru"]{display:none}
+.section-content[data-lang="ru"]{display:none}
 .section-content{margin-top:0}
 @media(max-width:880px){
   .page{grid-template-columns:1fr}
@@ -10104,10 +10104,10 @@ function setLang(lang){
   document.querySelectorAll('#langtog button').forEach(function(b){
     b.classList.toggle('on', b.getAttribute('data-lang') === lang);
   });
-  document.querySelectorAll('[data-lang="en"]').forEach(function(el){
+  document.querySelectorAll('.section-content[data-lang="en"]').forEach(function(el){
     el.style.display = lang === 'en' ? '' : 'none';
   });
-  document.querySelectorAll('[data-lang="ru"]').forEach(function(el){
+  document.querySelectorAll('.section-content[data-lang="ru"]').forEach(function(el){
     el.style.display = lang === 'ru' ? '' : 'none';
   });
   try{ localStorage.setItem('neegde_wiki_lang', lang); }catch(e){}
